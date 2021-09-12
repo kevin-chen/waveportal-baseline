@@ -6,7 +6,7 @@ import abi from "./utils/WavePortal.json";
 export default function App() {
 
   const [currAccount, setCurrentAccount] = React.useState("");
-  const contractAddress = "0x268ac85e0CB79c3b29962a85F29e8AfF0Fc075ba"
+  const contractAddress = "0xf814FFBe5221aDe73CE5331f28F97fa2062Eb412"
   const contractABI = abi.abi;
   const [joke, setJoke] = React.useState("");
   const [waves, setWaves] = React.useState(0);
@@ -29,6 +29,15 @@ export default function App() {
       })
     });
     setAllWaves(wavesCleaned);
+
+    waveportalContract.on("NewWave", (from, timestamp, message) => {
+      console.log("NewWave", from, timestamp, message)
+      setAllWaves(oldArray => [...oldArray, {
+        address: from,
+        timestamp: new Date(timestamp * 1000),
+        message: message
+      }])
+    })
   }
 
   const checkIfWalletIsConnected = () => { 
@@ -82,7 +91,8 @@ export default function App() {
     let count = await waveportalContract.getTotalWaves()
     console.log("Retrieved total wave count...", count.toNumber())
 
-    const waveTxn = await waveportalContract.wave(joke)
+    const waveTxn = await waveportalContract.wave(joke, { gasLimit: 300000 });
+
     console.log("Mining...", waveTxn.hash)
     await waveTxn.wait()
     console.log("Mined -- ", waveTxn.hash)
