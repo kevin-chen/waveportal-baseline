@@ -6,7 +6,7 @@ import abi from "./utils/WavePortal.json";
 export default function App() {
 
   const [currAccount, setCurrentAccount] = React.useState("");
-  const contractAddress = "0xf71aCcaBCFb53A90562b0329f2B4B7efa0Ff328D"
+  const contractAddress = "0x268ac85e0CB79c3b29962a85F29e8AfF0Fc075ba"
   const contractABI = abi.abi;
   const [joke, setJoke] = React.useState("");
   const [waves, setWaves] = React.useState(0);
